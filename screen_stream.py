@@ -6,7 +6,11 @@ import time
 
 class ScreenStream():
 
-    def __init__(self, frame_rate=60):
+    def __init__(self, width, height, top=0, left=0, frame_rate=30):
+        self.width = width
+        self.height = height
+        self.top = top
+        self.left = left
         self.frame_rate = frame_rate
 
         self.stop_stream = False
@@ -22,7 +26,7 @@ class ScreenStream():
         print("Stream started")
 
     def start_stream(self):
-        self.stream = d3dshot.create(capture_output="numpy", capture_frame_rate=self.frame_rate)
+        self.stream = d3dshot.create(capture_output="numpy")
 
         with self.frame_lock:
             while not self.stop_stream:
@@ -40,7 +44,7 @@ class ScreenStream():
 
 
 if __name__ == '__main__':
-    stream = ScreenStream(width=3024, height=1964, top=0, left=0, frame_rate=60)
+    stream = ScreenStream(width=3024, height=1964, top=0, left=0, frame_rate=2, record_path="test.mp4")
     stream.start()
     time.sleep(10)
     stream.stop()
