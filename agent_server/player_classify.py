@@ -1,4 +1,8 @@
-from ..Sequoia.detect import detect
+#from Sequoia.detect import detect
+#import sys
+#sys.path.append(r"C:\Users\Sean\Documents\CS-AI\Sequoia")
+
+import imp
 import cv2
 import torch
 import numpy as np
@@ -6,26 +10,30 @@ from os import path
 from time import time
 import torch.backends.cudnn as cudnn
 from numpy import asarray, random, reshape, swapaxes
-from strektref import set_pos
+#from strektref import set_pos
+import copy
+from PIL import Image
+import threading
 
-from ..Sequoia.light_inference import light_run
-from ..Sequoia.light_inference import load_light_weights
-from ..Sequoia.models.experimental import attempt_load
-from ..Sequoia.utils.general import (apply_classifier, check_img_size,
+
+from Sequoia.light_inference import light_run
+from Sequoia.light_inference import load_light_weights
+import Sequoia.models.experimental as experimental
+from Sequoia.utils.general import (apply_classifier, check_img_size,
                            non_max_suppression, plot_one_box, scale_coords,
                            set_logging, strip_optimizer, xyxy2xywh)
 
 class PlayerClassify:
 
-    def __init__(self, window_x=2560, window_y=1440, conf_threshold=0.3, view_img=False, benchmark=False):
+    def __init__(self, window_x=2560, window_y=1440, conf_threshold=0.2, view_img=True, benchmark=False):
         self.window_x = window_x
         self.window_y = window_y
         self.conf_threshold = conf_threshold
         self.view_img = view_img
         self.benchmark = benchmark
 
-        self.yolo_weights_path = "../Sequoia/sequoiaV1.pt"
-        self.light_weights_path = "../Sequoia/light_classifier_v1.th"
+        self.yolo_weights_path = "agent_server\sequoiaV1.pt"
+        self.light_weights_path = "agent_server\light_classifier_v1.th"
 
         self.use_light = True
 
@@ -36,17 +44,23 @@ class PlayerClassify:
     def detect(self, frame):
         # Initialize
         device = torch.device("cuda:0")
-        print("detecting on: %s"%(torch.cuda.get_device_name(device)))
+        #print("detecting on: %s"%(torch.cuda.get_device_name(device)))
 
         # Load model
-        model = attempt_load(self.yolo_weights_path, map_location=device)
+        model = experimental.attempt_load(self.yolo_weights_path, map_location=device)
         load_light_weights(self.light_weights_path)
 
         names = model.module.names if hasattr(model, 'module') else model.names
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(names))]
 
         # Run inference
-        im0 = frame #save raw image for later
+        #print(frame)
+        #frame = copy.deepcopy(frame)
+        img = frame.resize((512, 512))
+        img = np.asarray(img)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        im0 = img #save raw image for later
         ## preparing img for torch inference
         img = swapaxes(img, 0, 2)
         img = swapaxes(img, 1, 2)
@@ -118,12 +132,12 @@ class PlayerClassify:
                                 cv2.putText(im0,f"yolo:{label[:2]}, light:{light_pred:1f} ({ct_tr_light})", (10,500), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
                     if self.use_light:
                         break #this break ensures only one bbox will be showed per viewport render (inference)
-
             # Stream results
             if self.view_img:
+                #cv2.namedWindow("frame", cv2.WINDOW_NORMAL)
                 im0 = cv2.resize(im0, (1280,720))
                 cv2.imshow(p, im0)
                 if cv2.waitKey(1) == ord('q'):  # q to quit
                     raise StopIteration
-        
+
         return bboxes
