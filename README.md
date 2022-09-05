@@ -1,2 +1,2 @@
-# CS-AI
+# DeepGO
 CS:GO Reinforcement Learning AI
