@@ -1,4 +1,4 @@
-from ..utils.frame_crop import FrameCrop
+from utils.frame_crop import FrameCrop
 
 class Map:
 
