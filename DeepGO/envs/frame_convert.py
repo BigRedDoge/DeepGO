@@ -6,11 +6,15 @@ def frame(frame):
     try:
         if frame is not None:
             frame = copy.deepcopy(frame)
-            frame = frame.resize((512, 512))
+            frame = cv2.resize(frame, (256, 144))
             frame = np.asarray(frame).astype(np.uint8)  
-            #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            #cv2.imshow('DeepGO', frame)
+            #cv2.waitKey(1)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         else:
-            frame = np.zeros((512, 512, 3), dtype=np.uint8)
+            print("whoops")
+            frame = np.zeros((256, 144, 3), dtype=np.uint8)
             return frame
-    except:
-        return np.zeros((512, 512, 3), dtype=np.uint8)
+    except Exception as e:
+        print("whoops 2", e)
+        return np.zeros((256, 144, 3), dtype=np.uint8)
