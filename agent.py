@@ -26,7 +26,7 @@ class Agent:
         if self.server is not None:
             self.server.send_input(input)
 
-    def get_agent_state(self):
+    def get_state(self):
         return self.agent
 
 
