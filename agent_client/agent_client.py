@@ -2,6 +2,7 @@ from csgo_gsi.server import GSIServer
 from utils.screen_stream import ScreenStream
 from utils.message import Message
 from multiprocessing.connection import Client
+from agent_client.agent_controller import AgentController
 import threading
 import time
 import copy
@@ -24,6 +25,8 @@ class AgentClient:
 
         self.conn = Client(address)
         self.stop_client = False
+
+        self.controller = AgentController()
 
     def start(self):
         self.client_thread = threading.Thread(target=self.start_client)
@@ -49,8 +52,8 @@ class AgentClient:
                 self.stop_client = True
                 break
 
-    def handle_input(sefl, input):
-        print(input)
+    def handle_input(self, input):
+        self.controller.action(input)
 
     def stop(self):
         self.stop_client = True
