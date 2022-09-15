@@ -1,8 +1,8 @@
 # DeepGO
 CS:GO Reinforcement Learning AI
 
-### Plan For Model Structure:
-  - EfficientNet
+### Plan For Network Structure:
+  - Yolov5 Stage 1 Convolution - Trained on CS:GO dataset
   - GRU 5x256
   - Linear + ReLU
   - Keys + Mouse Outputs
