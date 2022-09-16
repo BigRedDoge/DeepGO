@@ -1,0 +1,3 @@
+[submodule "Yolov5-Custom-Feature-Extraction"]
+	path = Yolov5-Custom-Feature-Extraction
+	url = https://github.com/BigRedDoge/Yolov5-Custom-Feature-Extraction.git
