@@ -7,7 +7,7 @@ from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from yolov5.models.common import DetectMultiBackend
 from yolov5.utils.torch_utils import select_device
 
-class CustomCNN(BaseFeaturesExtractor):
+class YoloFeatures(BaseFeaturesExtractor):
     """
     :param observation_space: (gym.Space)
     :param features_dim: (int) Number of features extracted.
@@ -15,7 +15,7 @@ class CustomCNN(BaseFeaturesExtractor):
     """
 
     def __init__(self, observation_space: gym.spaces.Box, features_dim: int = 256):
-        super(CustomCNN, self).__init__(observation_space, features_dim)
+        super(YoloFeatures, self).__init__(observation_space, features_dim)
 
         n_input_channels = observation_space.shape[0]
        

@@ -4,11 +4,11 @@ from stable_baselines3 import DQN, A2C, DDPG, PPO, TD3, SAC
 import gym
 
 from DeepGO.envs.deepgo_env import DeepGOEnv
-
+from feature_extractor import YoloFeatures
 
 env = make_vec_env(DeepGOEnv)
 
-model = A2C(CnnPolicy, env, verbose=1, n_steps=5)
+model = PPO(YoloFeatures, env, verbose=1, n_steps=5)
 
 model.learn(total_timesteps=1000)
 
