@@ -3,8 +3,8 @@ CS:GO Reinforcement Learning AI
 
 ### Plan For Network Structure:
   - Yolov5 Stage 1 Convolution - Trained on CS:GO dataset
-  - GRU 5x256
-  - Linear + ReLU
+  - GRU
+  - Linear
   - Keys + Mouse Outputs
 
 
